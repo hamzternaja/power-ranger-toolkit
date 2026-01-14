@@ -93,16 +93,16 @@ function copyDir(src, dest) {
     log.warn(`Source not found: ${src}`);
     return 0;
   }
-  
+
   fs.mkdirSync(dest, { recursive: true });
   let count = 0;
-  
+
   const entries = fs.readdirSync(src, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
-    
+
     if (entry.isDirectory()) {
       count += copyDir(srcPath, destPath);
     } else {
@@ -110,7 +110,7 @@ function copyDir(src, dest) {
       count++;
     }
   }
-  
+
   return count;
 }
 
@@ -118,12 +118,13 @@ function copyDir(src, dest) {
 function install(options = {}) {
   showBanner();
   log.title('🚀 Installing Power Ranger Toolkit...');
-  
+
   const srcDir = path.join(__dirname, '..', 'src');
   const targets = getTargetPaths();
-  
+  const home = getUserHome();
+
   let totalFiles = 0;
-  
+
   // Install skills
   if (!options.agentsOnly) {
     log.info('Installing skills...');
@@ -133,7 +134,7 @@ function install(options = {}) {
     totalFiles += skillCount;
     log.success(`Installed ${skillCount} skill files`);
   }
-  
+
   // Install agents
   if (!options.skillsOnly) {
     log.info('Installing agents...');
@@ -143,7 +144,7 @@ function install(options = {}) {
     totalFiles += agentCount;
     log.success(`Installed ${agentCount} agent files`);
   }
-  
+
   // Install workflows
   log.info('Installing workflows...');
   const workflowsSrc = path.join(srcDir, 'workflows');
@@ -151,7 +152,7 @@ function install(options = {}) {
   const workflowCount = copyDir(workflowsSrc, workflowsDest);
   totalFiles += workflowCount;
   log.success(`Installed ${workflowCount} workflow files`);
-  
+
   // Install knowledge
   log.info('Installing knowledge base...');
   const knowledgeSrc = path.join(srcDir, 'knowledge');
@@ -159,7 +160,7 @@ function install(options = {}) {
   const knowledgeCount = copyDir(knowledgeSrc, knowledgeDest);
   totalFiles += knowledgeCount;
   log.success(`Installed ${knowledgeCount} knowledge files`);
-  
+
   // Install memory
   log.info('Installing memory system...');
   const memorySrc = path.join(srcDir, 'memory');
@@ -167,7 +168,26 @@ function install(options = {}) {
   const memoryCount = copyDir(memorySrc, memoryDest);
   totalFiles += memoryCount;
   log.success(`Installed ${memoryCount} memory files`);
-  
+
+  // Install GEMINI.md (user rules)
+  log.info('Installing GEMINI.md user rules...');
+  const geminiSrc = path.join(srcDir, 'GEMINI.md');
+  const geminiDest = path.join(home, '.gemini', 'GEMINI.md');
+  if (fs.existsSync(geminiSrc)) {
+    fs.mkdirSync(path.join(home, '.gemini'), { recursive: true });
+    fs.copyFileSync(geminiSrc, geminiDest);
+    totalFiles += 1;
+    log.success('Installed GEMINI.md user rules');
+  }
+
+  // Install .agent folder (knowledge base, solutions, lessons)
+  log.info('Installing .agent knowledge base...');
+  const agentFolderSrc = path.join(srcDir, '.agent');
+  const agentFolderDest = path.join(home, '.gemini', 'antigravity', '.agent');
+  const agentFolderCount = copyDir(agentFolderSrc, agentFolderDest);
+  totalFiles += agentFolderCount;
+  log.success(`Installed ${agentFolderCount} knowledge base files`);
+
   // Summary
   console.log('');
   log.title('✨ Installation Complete!');
@@ -177,6 +197,8 @@ ${colors.bright}Summary:${colors.reset}
   📍 Skills location: ${colors.cyan}${targets.antigravity}/skills${colors.reset}
   📍 Agents location: ${colors.cyan}${targets.antigravity}/agents${colors.reset}
   📍 Workflows location: ${colors.cyan}${targets.agent}/workflows${colors.reset}
+  📍 GEMINI.md: ${colors.cyan}${path.join(home, '.gemini', 'GEMINI.md')}${colors.reset}
+  📍 Knowledge base: ${colors.cyan}${agentFolderDest}${colors.reset}
 
 ${colors.bright}What's next?${colors.reset}
   1. Open your project in Antigravity IDE
@@ -191,9 +213,9 @@ ${colors.green}🦸 Go Power Rangers! 🦸${colors.reset}
 function list() {
   showBanner();
   log.title('📋 Installed Components');
-  
+
   const targets = getTargetPaths();
-  
+
   // Skills
   const skillsPath = path.join(targets.antigravity, 'skills');
   if (fs.existsSync(skillsPath)) {
@@ -201,7 +223,7 @@ function list() {
     console.log(`\n${colors.bright}Skills (${skills.length}):${colors.reset}`);
     skills.forEach(s => console.log(`  ${colors.green}✓${colors.reset} ${s}`));
   }
-  
+
   // Agents
   const agentsPath = path.join(targets.antigravity, 'agents');
   if (fs.existsSync(agentsPath)) {
@@ -209,7 +231,7 @@ function list() {
     console.log(`\n${colors.bright}Agents (${agents.length}):${colors.reset}`);
     agents.forEach(a => console.log(`  ${colors.green}✓${colors.reset} ${a}`));
   }
-  
+
   console.log('');
 }
 

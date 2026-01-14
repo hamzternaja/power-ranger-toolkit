@@ -1,6 +1,6 @@
 {
     "name": "power-ranger-toolkit",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "🦸 AI-Enhanced Development Framework with 70+ Skills, 7 Agents, and Complete Memory System for Antigravity IDE",
     "main": "src/index.js",
     "bin": {
