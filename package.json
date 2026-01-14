@@ -1,0 +1,40 @@
+{
+    "name": "power-ranger-toolkit",
+    "version": "1.0.0",
+    "description": "🦸 AI-Enhanced Development Framework with 70+ Skills, 7 Agents, and Complete Memory System for Antigravity IDE",
+    "main": "src/index.js",
+    "bin": {
+        "power-ranger-toolkit": "./bin/cli.js",
+        "prt": "./bin/cli.js"
+    },
+    "scripts": {
+        "install-framework": "node bin/cli.js install",
+        "test": "node bin/cli.js --help"
+    },
+    "keywords": [
+        "antigravity",
+        "ai",
+        "framework",
+        "skills",
+        "agents",
+        "development",
+        "productivity",
+        "coding-assistant",
+        "gemini",
+        "vibe-coding"
+    ],
+    "author": "Power Ranger Developer",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lovedragonball/power-ranger-toolkit"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "files": [
+        "bin/",
+        "src/",
+        "README.md"
+    ]
+}
