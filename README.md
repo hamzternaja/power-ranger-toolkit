@@ -84,11 +84,11 @@ npx power-ranger-toolkit --help
 
 | Component | Location |
 |-----------|----------|
-| Skills | `~/.antigravity/skills/` |
-| Agents | `~/.antigravity/agents/` |
-| Workflows | `~/.agent/workflows/` |
-| Knowledge | `~/.agent/knowledge/` |
-| Memory | `~/.agent/memory/` |
+| Skills | `~/.gemini/antigravity/skills/` |
+| Agents | `~/.gemini/antigravity/agents/` |
+| Workflows | `~/.gemini/antigravity/workflows/` |
+| Knowledge | `~/.gemini/antigravity/knowledge/` |
+| Memory | `~/.gemini/antigravity/memory/` |
 
 ## 🎯 Requirements
 

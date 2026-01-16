@@ -82,8 +82,8 @@ function getUserHome() {
 function getTargetPaths() {
   const home = getUserHome();
   return {
-    antigravity: path.join(home, '.antigravity'),
-    agent: path.join(home, '.agent'),
+    antigravity: path.join(home, '.gemini', 'antigravity'),
+    agent: path.join(home, '.gemini', 'antigravity'),
   };
 }
 
